@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <form id='update_file'>
+    <a href='#' onclick="goBack()">ກັບ​ຄືນ</a> <br>
+    <h2>update file</h2>
+    <label for="err_definition">ຫົວ​ຂໍ້: </label>
+    <input type="text" style="background-color: #bbd0ff;" id="err_definition" name="err_definition" value="<%= data.title %>" disabled>
+    <label for="file-upload">ເລືອກ file:</label>
+    <input type="file" name="file" id="file-upload">
+    <br>
+    <br>
+    <center>
+      <button type='submit' id="button">upload</button>
+    </center>
+  </form>
+
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    var err_id = urlParams.get('err_id');
+    const goBack = () => {
+      window.location.href = '/views/err_definition/' + err_id
+    }
+
+    const myForm = document.getElementById('update_file');
+    myForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // prevent form from submitting
+      try {
+        const formData = new FormData();
+        let file = document.getElementById('file-upload').files[0]
+        formData.append('file', file)
+        const result = await fetch('/api/resolution/update_file/<%= data._id %>', {
+          method: 'PATCH',
+          body: formData
+        })
+        let data = await result.json()
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        alert('update ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
+        window.location.href = '/views/err_definition/' + err_id;
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+      }
+    })
+  </script>
+</body>
+
+</html>

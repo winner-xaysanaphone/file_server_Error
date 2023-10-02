@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <style>
+    
+  </style> -->
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+</head>
+
+<body style="overflow-x: auto;">
+  <table style="background-color: white;">
+    <thead>
+      <tr>
+        <th>ຫົວ​ຂໍ້</th>
+        <th>ລາຍ​ລະ​ອຽດ</th>
+        <th>
+          <button id="button" style="background-color: #8B0000;">delete</button>
+          <button id="button" style="background: #006400;">update</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <td><%= data.title %></td>
+      <td style="text-align: justify;"><%= data.description %></td>
+
+      <td style="text-align: center;">
+        <div class="card">
+          <div class="card-body">
+            <% if (['jpg', 'jpeg', 'png'].includes(data.file_ext)) { %>
+            <img src="http://localhost:911/static/<%= data.file_path %>" alt="ເກີດ​ຂໍ້​ຜິດ​ພາດ" style="max-width: 400px;">
+            <%  } else if (data.file_ext === 'mp4') { %>
+            <video src="<%= //file_path %>" controls> </video>
+            <%  } else if(['pdf','docx'].includes(data.file_ext)) { %>
+            <p>
+              <a href="<%= //file_path %>">download ເອ​ກະ​ສານ</a>
+            </p>
+            <% } %>
+          </div>
+          <center>
+            <small><%= data.like.length %> &#x1F642;</small> |
+            <small><%=  data.dislike.length %> &#x1F641;</small>
+          </center>
+          <div class="card-footer">
+            <button id="button">&#x1F642;</button>
+            <button id="button">&#x1F641;</button>
+            <a href="#" id="button">download</a>
+            <!-- <a href="#" class="like-button" style="font-size:0.9em">ເພີ່ມ​ເຕີມ</a> -->
+          </div>
+        </div>
+      </td>
+
+    </tbody>
+  </table>
+
+
+</body>
+
+</html>

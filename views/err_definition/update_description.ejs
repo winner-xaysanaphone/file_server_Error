@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+  <style>
+    .textarea-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .styled-textarea {
+      display: block;
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      margin: 0;
+      font-size: 16px;
+      font-family: 'Noto Serif Lao', serif;
+      line-height: 1.5;
+      color: #333;
+      background-color: #f8f8f8;
+      border: 1px solid black;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .styled-textarea:focus {
+      outline: none;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <form id='form-description'>
+    <a href='/views/err_definition/<%= data._id %>' style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;">ກັບ​ຄືນ</a> <br>
+    <h2>ແກ້​ໄຂລາຍ​ລະ​ອຽດ</h2>
+    <label for="err_definition">ລາຍ​ລະ​ອຽດ</label>
+    <!-- <input type="text" style="background-color: #bbd0ff;" id="err_definition" name="err_definition" value="<%= data.title %>" disabled> -->
+    <textarea name="description" id="description" cols="30" rows="10" class="styled-textarea" placeholder="ເພີ່ມ​ລາຍ​ລະ​ອຽດ">
+        <%= data.description %>
+    </textarea>
+    <br>
+    <br>
+    <center>
+      <button type='submit' id="button">update</button>
+    </center>
+  </form>
+
+
+  <script>
+    const myForm = document.getElementById('form-description');
+    myForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // prevent form from submitting
+      try {
+        let description = document.getElementById('description').value
+        let obj = {
+          description: description
+        }
+        const result = await fetch('/api/err_definition/<%= data._id %>?add_views=false', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'PUT',
+          body: JSON.stringify(obj)
+        })
+        let data = await result.json()
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        alert('update ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
+        window.location.href = window.location.href;
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+      }
+    })
+  </script>
+</body>
+
+</html>

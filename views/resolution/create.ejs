@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+  <form id="create_resolution">
+    <a href='/views/err_definition/<%= data._id %>'  style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;" style="font-size: 1.2em">ກັບ​ຄືນ</a>
+    <h2>ເພີ່ມ​ວິ​ທີ​ແກ້​ໄຂ​ບັນ​ຫາ</h2>
+
+    <label for="err_definition">Error: </label>
+    <input type="text" style="background-color: #bbd0ff;" id="err_definition" name="err_definition" value="<%= data.code %>" disabled>
+
+    <label for="title">ຫົວ​ຂໍ້</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">ຄຳ​ອະ​ທິ​ບາຍ</label>
+    <textarea id="description" name="description" id='description' required></textarea>
+
+    <div class="input-file">
+      <label for="file-upload">ເລືອກ file:</label>
+      <input type="file" id="file-upload" name="file-upload" required>
+    </div>
+    <br>
+    <center>
+      <button type="submit" id="button">ເພີ່ມ</button>
+    </center>
+  </form>
+
+  <div>
+
+  </div>
+  <script>
+    const myForm = document.getElementById('create_resolution');
+    myForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // prevent form from submitting
+      try {
+        const formData = new FormData();
+        let file = document.getElementById('file-upload').files[0]
+        formData.append('file', file)
+        formData.append('title', document.getElementById('title').value)
+        formData.append('description', document.getElementById('description').value)
+        const result = await fetch('/api/resolution/create/push_to_err/<%= data._id %>', {
+          method: 'POST',
+          body: formData
+        })
+        let data = await result.json()
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        alert('ເພີ່ມ​ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
+        window.location.href = '/views/err_definition/<%= data._id %>';
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Error Details</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="container">
+    <a href='/views' style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;">ກັບ​ຄືນ</a>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Error Message</th>
+          <!-- <th>Priority</th> -->
+          <th>Views</th>
+          <th>⚙</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= data.code %></td>
+          <td><%= data.error_message %></td>
+          <!-- <td><%= //data.priority %></td> -->
+          <td><%= data.views %></td>
+          <td>
+            <!-- check owner and admin -->
+            <a href="/views/err_definition/update/<%= data._id %>" class="download-button">ແກ້​ໄຂ</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- root cause -->
+    <div class="root-cause description-box">
+
+      <button type="button" id="button" onclick="root_cause.push()">ເພີ່ມ​ສາ​ເຫດ</button>
+      <h4>ສາ​ເຫດ:</h4>
+      <div id="divScroll">
+        <table>
+          <thead>
+            <tr>
+              <!-- <th>ລຳ​ດັບ</th> -->
+              <th>ສາ​ເຫດ</th>
+              <th>⚙</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.root_cause && data.root_cause.length) { %>
+            <% data.root_cause.forEach((cause,index)=> { %>
+            <tr>
+              <!-- <td><%= // index + 1 %></td> -->
+              <td><%= cause %></td>
+              <td>
+                <button type="button" id="button" style="background-color: #D52941;" onclick="root_cause.pull('<%= cause %>')">ລ​ົບ</button>
+              </td>
+            </tr>
+            <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+
+      </div>
+      <hr>
+      <div class="description-box">
+        <h4>ລາຍ​ລະ​ອຽດ</h4>
+        <!-- <a href='/views/err_definition/update/description/<%= // data._id %>' id="button" style="background-color: #023047;">ແກ້​ໄຂ​ລາຍ​ລະ​ອຽດ</a> -->
+        <hr>
+        <br>
+        <paragraph><%= data.description %></paragraph>
+      </div>
+    </div>
+    <!-- resolutions -->
+    <div class="description-box">
+      <h4>ວິ​ທີ​ແກ້ບັນ​ຫາ​ເບື້ອງ​ຕົ້ນ:</h4>
+      <a href="/views/resolution_create/to_err/<%= data._id %>" id="button" style="margin-bottom: 2%;">ເພີ່ມ</a>
+      <div class="resolutions" id="divScroll">
+        <table style="background-color: white;">
+          <thead>
+            <tr>
+              <th>ຫົວ​ຂໍ້</th>
+              <th>ລາຍ​ລະ​ອຽດ</th>
+              <th>
+                file
+              </th>
+              <th>
+                ⚙
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.resolutions && data.resolutions.length) { %>
+            <% data.resolutions.map(resolution => { %>
+            <tr>
+              <td><%= resolution.title %></td>
+              <td style="text-align: justify;"><%= resolution.description %></td>
+              <!-- files -->
+              <td style="text-align: center;">
+                <div class="card">
+                  <div class="card-body">
+                    <% if (['jpg', 'jpeg', 'png'].includes(resolution.file_path.split('.').pop()) ){ %>
+                    <img src="/static/<%= resolution.file_path %>" alt="ເກີດ​ຂໍ້​ຜິດ​ພາດ" style="max-width: 400px;">
+                    <%  } else if (resolution.file_ext === 'mp4') { %>
+                    <video src="/static/<%= resolution.file_path %>" controls> </video>
+                    <%  } else if(['pdf','docx'].includes(resolution.file_path.split('.').pop())) { %>
+                    <p>
+                      <a href=" /download?file=<%= resolution.file_path %>">download ເອ​ກະ​ສານ</a>
+                    </p>
+                    <% } %>
+                  </div>
+                  <center>
+                    <!-- <small><%=// resolution.like.length %> &#x1F642;</small> | <small><%= // resolution.dislike.length %> &#x1F641;</small> -->
+                  </center>
+                  <div class="card-footer">
+                    <!-- <button id="button">&#x1F642;</button> -->
+                    <!-- <button id="button">&#x1F641;</button> -->
+                    <a href="/download?file=<%= resolution.file_path %>" id="button">download</a>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button type="button" id="button" style="background-color: #D52941;" onclick="resolution.remove('<%= resolution._id %>')">ລ​ົບ</button> <br><br>
+                <a href="/views/resolution/update/<%= resolution._id %>?err_id=<%= data._id %>" id="button" style="background-color: #023047;" onclick="">ແກ້​ໄຂ​ຂໍ້​ມູນ</a> <br><br>
+                <a href="/views/resolution/update_file/<%= resolution._id %>?err_id=<%= data._id %>" id="button" style="background-color: #023047;" onclick="">update file</a>
+              </td>
+
+            </tr>
+            <!-- import partial/resolution -->
+            <%- // include('../partials/resolution_table.ejs', {data: resolution}) %>
+            <% }) %>
+            <% } %>
+          </tbody>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    const root_cause = {
+      push: async () => { //* add root cause
+        try {
+          let cause = prompt('ເພີ່ມ​ສາ​ເຫດ', '')
+          if (cause) {
+            const obj = {
+              root_cause: cause
+            }
+            const result = await fetch('/api/err_definition/root_cause/push/<%= data._id %>?add_views=false', {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: 'PATCH',
+              body: JSON.stringify(obj)
+            })
+            let data = await result.json()
+            if (result.status >= 400) throw new Error(data.message, {
+              cause: data
+            })
+            window.location.href = window.location.href;
+          }
+        } catch (e) {
+          console.log(e)
+          alert(e.message || e.statusText)
+        }
+      },
+      pull: async (root_cause) => {
+        try {
+          let text = "ຍືນ​ຍັນ​ການ​ລົບ";
+          const obj = {
+            root_cause: root_cause
+          }
+          if (confirm(text) == true) {
+            const result = await fetch('/api/err_definition/root_cause/pull/<%= data._id %>?add_views=false', {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: "PATCH",
+              body: JSON.stringify(obj)
+            })
+            let data = await result.json()
+            if (result.status >= 400) throw new Error(data.message, {
+              cause: data
+            })
+            window.location.href = window.location.href;
+          }
+        } catch (error) {
+          console.log(error)
+          alert(error.message || error.statusText)
+        }
+      }
+    }
+    const resolution = {
+      remove: async (_id) => {
+        try {
+          let text = "ຍືນ​ຍັນ​ການ​ລົບ"
+          if (confirm(text) == true) {
+            const obj = {
+              err_id: '<%= data._id %>'
+            }
+            const result = await fetch('/api/resolution/' + _id, {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: "DELETE",
+              body: JSON.stringify(obj)
+            })
+            let data = await result.json()
+            if (result.status >= 400) throw new Error(data.message, {
+              cause: data
+            })
+            window.location.href = window.location.href;
+          }
+        } catch (error) {
+          console.log(error)
+          alert(error.message || error.statusText)
+        }
+      },
+    }
+    const err_def_update = (_id) => {
+
+    }
+  </script>
+</body>
+
+</html>

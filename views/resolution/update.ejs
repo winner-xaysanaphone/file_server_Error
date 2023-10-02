@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+  <form id="create_resolution">
+    <a href='#' onclick="goBack()" style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;" style="font-size: 1.2em">ກັບ​ຄືນ</a>
+    <h2>ແກ້​ໄຂ​ວິ​ທີ​ແກ້​ໄຂ​ບັນ​ຫາ</h2>
+
+    <label for="title_disabled">ຫົວ​ຂໍ້</label>
+    <input type="text" style="background-color: #bbd0ff;" id="title_disable" name="title_disable" value="<%= data.title %>" disabled>
+
+    <label for="title">ຫົວ​ຂໍ້</label>
+    <input type="text" id="title" name="title" required value="<%= data.title %>">
+
+    <label for="description">ຄຳ​ອະ​ທິ​ບາຍ</label>
+    <textarea id="description" name="description" id='description' required> <%= data.description %></textarea>
+
+    <br>
+    <center>
+      <button type="submit" id="button">ແກ້​ໄຂ</button>
+    </center>
+  </form>
+
+  <div>
+
+  </div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    var err_id = urlParams.get('err_id');
+    const goBack = () => {
+      window.location.href = '/views/err_definition/' + err_id
+    }
+    const myForm = document.getElementById('create_resolution');
+    myForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // prevent form from submitting
+      try {
+        const obj = {}
+        let fields = ['title', 'description']
+        fields.map(field => obj[field] = document.getElementById(field).value)
+        const result = await fetch('/api/resolution/<%= data._id %>', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'PUT',
+          body: JSON.stringify(obj)
+        })
+        let data = await result.json()
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        alert('​update ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
+        window.location.href = '/views/err_definition/' + err_id;
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+      }
+    })
+  </script>
+</body>
+
+</html>
