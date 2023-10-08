@@ -1,11 +1,24 @@
 const express = require('express')
 const router = express.Router()
-const err_definition = require('../controllers/err_definition')
-const resolution = require('../controllers/resolution')
-const file_upload = require('../middlewares/file_upload')
-const multipart_form = require('../middlewares/multipart_form')
-const serve_query = require('../middlewares/serve_query')
+const err_definition = require('../../controllers/err_definition')
+const resolution = require('../../controllers/resolution')
+const file_upload = require('../../middlewares/file_upload')
+const multipart_form = require('../../middlewares/multipart_form')
+const serve_query = require('../../middlewares/serve_query')
+const user = require('../../controllers/user')
+const authorize = require('../../middlewares/authorize')
 
+// * users
+router.route('/user')
+    .get(user.read, serve_query)
+
+router.route('/user/:_id')
+    .put(user.update_as_admin)
+    .patch(user.reset_password_as_admin)
+    .delete(user.delete)
+
+router.route('/user/password/:_id')
+    .patch(user.update_password_as_admin)
 
 
 // * err_definition

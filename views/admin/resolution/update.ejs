@@ -26,7 +26,7 @@
     <input type="text" id="title" name="title" required value="<%= data.title %>">
 
     <label for="description">ຄຳ​ອະ​ທິ​ບາຍ</label>
-    <textarea id="description" name="description" id='description' required> <%= data.description %></textarea>
+    <textarea id="description" name="description" id='description'> <%= data.description %></textarea>
 
     <br>
     <center>
@@ -41,7 +41,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     var err_id = urlParams.get('err_id');
     const goBack = () => {
-      window.location.href = '/views/err_definition/' + err_id
+      window.location.href = '/admin/views/err_definition/' + err_id
     }
     const myForm = document.getElementById('create_resolution');
     myForm.addEventListener('submit', async (event) => {
@@ -50,7 +50,7 @@
         const obj = {}
         let fields = ['title', 'description']
         fields.map(field => obj[field] = document.getElementById(field).value)
-        const result = await fetch('/api/resolution/<%= data._id %>', {
+        const result = await fetch('/admin/api/resolution/<%= data._id %>', {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -62,7 +62,7 @@
           cause: data
         })
         alert('​update ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
-        window.location.href = '/views/err_definition/' + err_id;
+        window.location.href = '/admin/views/err_definition/' + err_id;
       } catch (error) {
         console.log(error)
         alert(error.message)

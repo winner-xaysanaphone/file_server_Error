@@ -6,7 +6,6 @@ const schema = new mongoose.Schema({
     tel: String,
     password: {
         type: String,
-        unique: true,
         required: true
     },
     role: {
@@ -17,13 +16,13 @@ const schema = new mongoose.Schema({
     branch_code: {
         type: String,
         required: true,
-        unique: true,
         default: '0'
     },
     department: String,
     status: {
         type: String,
-        enum: ["lock", "normal", "disabled"]
+        enum: ["lock", "normal", "disabled"],
+        default: 'normal'
     }
 }, { timestamps: true });
 

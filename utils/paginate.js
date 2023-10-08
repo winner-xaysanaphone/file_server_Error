@@ -5,7 +5,7 @@ const paginate = async ({
     customSearch = {},
     populate = [],
     select = [],
-    sort = [{ "created_at": 1 }],
+    sort = [["created_at", 1]],
 }) => {
     // req is required
     if (!req) throw new Error("req is required");

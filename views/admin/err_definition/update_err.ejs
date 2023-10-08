@@ -32,7 +32,7 @@
     const goBack = () => {
       // const urlParams = new URLSearchParams(window.location.search);
       // const err_id = urlParams.get('err_id');
-      window.location.href = '/views/err_definition/' + data._id
+      window.location.href = '/admin/views/err_definition/' + data._id
     }
 
     const myForm = document.getElementById('update_file');
@@ -42,7 +42,7 @@
         const formData = new FormData();
         let file = document.getElementById('file-upload').files[0]
         formData.append('file', file)
-        const result = await fetch('/api/resolution/update_file/<%= data._id %>', {
+        const result = await fetch('/admin/api/resolution/update_file/<%= data._id %>', {
           method: 'PATCH',
           body: formData
         })

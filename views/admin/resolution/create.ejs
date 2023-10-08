@@ -16,7 +16,7 @@
 
 
   <form id="create_resolution">
-    <a href='/views/err_definition/<%= data._id %>'  style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;" style="font-size: 1.2em">ກັບ​ຄືນ</a>
+    <a href='/admin/views/err_definition/<%= data._id %>'  style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;" style="font-size: 1.2em">ກັບ​ຄືນ</a>
     <h2>ເພີ່ມ​ວິ​ທີ​ແກ້​ໄຂ​ບັນ​ຫາ</h2>
 
     <label for="err_definition">Error: </label>
@@ -26,7 +26,7 @@
     <input type="text" id="title" name="title" required>
 
     <label for="description">ຄຳ​ອະ​ທິ​ບາຍ</label>
-    <textarea id="description" name="description" id='description' required></textarea>
+    <textarea id="description" name="description" id='description'></textarea>
 
     <div class="input-file">
       <label for="file-upload">ເລືອກ file:</label>
@@ -51,7 +51,7 @@
         formData.append('file', file)
         formData.append('title', document.getElementById('title').value)
         formData.append('description', document.getElementById('description').value)
-        const result = await fetch('/api/resolution/create/push_to_err/<%= data._id %>', {
+        const result = await fetch('/admin/api/resolution/create/push_to_err/<%= data._id %>', {
           method: 'POST',
           body: formData
         })
@@ -60,7 +60,7 @@
           cause: data
         })
         alert('ເພີ່ມ​ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
-        window.location.href = '/views/err_definition/<%= data._id %>';
+        window.location.href = '/admin/views/err_definition/<%= data._id %>';
       } catch (error) {
         console.log(error)
         alert(error.message)

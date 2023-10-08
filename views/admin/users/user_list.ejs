@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* search bar */
+  </style>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+
+</head>
+
+<body style="padding:3% 20%;">
+
+  <%- include('../partials/nav') %>
+
+
+  <!-- search bar -->
+  <div class="search-box" style="margin: 2%;">
+    <form class="search-form">
+      <center>
+        <input type="text" name='search' class="search-input" placeholder="ຄົ້ນ​ຫາ..." style="width: 300px;font-size: large;font-family: 'Noto Serif Lao', serif;">
+        <button class="search-icon" id="button" style="font-size: large;">&#128269;</button> <!-- This is the Unicode for a magnifying glass -->
+      </center>
+    </form>
+  </div>
+  </div>
+
+  <!-- table -->
+  <div id="divScroll">
+    <table>
+      <thead>
+        <tr>
+          <!-- <th>No</th> -->
+          <th>teller id</th>
+          <th>role</th>
+          <!-- <th>status</th> -->
+          <!-- <th>branch code</th> -->
+          <th>⚙</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i=0; i < data.data.length; i++) { %>
+        <tr>
+
+          <td>
+            <%= data.data[i].teller_id%>
+          </td>
+          <td>
+            <%= data.data[i].role %>
+          </td>
+
+          <td>
+            <br> <br>
+            <a href='/admin/views/user/<%= data.data[i]._id %>' id='button'>ແກ້​ໄຂຂໍ້​ມູນ</a> <br> <br>
+            <a href='/admin/views/user/update/password/<%= data.data[i]._id %>' id='button'>update password</a> <br> <br>
+            <button id='button' onclick="feature.reset_password('<%= data.data[i]._id %>')">reset password</button>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+
+  </div>
+  <script>
+    const feature = {
+      reset_password: async (_id) => {
+        try {
+          let text = "ຍືນ​ຍັນ​ການ​ reset";
+          if (confirm(text) == true) {
+            const result = await fetch('/admin/api/user/' + _id, {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: 'PATCH',
+            })
+            if (result.status > 400) throw new Error(result.statusText, {
+              cause: result
+            })
+            // window.location.href = window.location.href;
+            alert('reset ສຳ​ເລັດ:: your new password: p@zzw0rd')
+          }
+        } catch (e) {
+          console.log(e)
+          alert(e.message || e.statusText)
+        }
+      },
+    }
+
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = searchForm.querySelector('input[name="search"]');
+
+    searchForm.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent the form from submitting
+
+      //   const searchQuery = searchInput.value.trim(); // Get the search query
+      if (searchQuery) {
+        searchForm.action = `/search?search=${encodeURIComponent(searchInput)}`; // Update the action attribute
+        searchForm.submit(); // Submit the form
+      }
+    });
+  </script>
+</body>
+
+</html>

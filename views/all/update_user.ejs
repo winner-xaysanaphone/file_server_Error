@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <% if(role === 'ADMIN'){ %>
+  <%- include('../admin/partials/nav') %>
+  <% }else{  %>
+  <%- include('../user/partials/nav') %>
+  <% } %>
+  <form id='update_file'>
+
+    <h2>update user</h2>
+    <p>teller id: <%= data.teller_id %></p>
+    <p>username: <%= data.username %></p>
+    <label for="teller_id">teller id</label>
+    <input type="text" style="background-color: #bbd0ff;" id="teller_id" name="teller_id" value="">
+    <label for="username">username</label>
+    <input type="text" style="background-color: #bbd0ff;" id="username" name="username" value="">
+
+    <br>
+    <br>
+    <center>
+      <button type='submit' id="button">update</button>
+    </center>
+  </form>
+
+
+  <script>
+    const goBack = () => {
+      window.location.href = '/admin/views/users'
+    }
+
+    const myForm = document.getElementById('update_file');
+    myForm.addEventListener('submit', async (event) => {
+      try {
+        event.preventDefault(); // prevent form from submitting
+        const obj = {}
+        let fields = ['teller_id', 'username']
+        fields.map(field => obj[field] = document.getElementById(field).value)
+        let role = '<%= role %>'
+        let path = role === 'ADMIN' ? '/admin/api/user/<%= data._id %>' : '/api/user'
+        let result = await fetch(path, {
+          method: 'PUT',
+          body: JSON.stringify(obj),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        let data = await result.json()
+
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        alert('update ຂໍ້​ມູນ​ສຳ​ເລັດ ✅')
+        window.location.href = window.location.href;
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+      }
+    })
+  </script>
+</body>
+
+</html>

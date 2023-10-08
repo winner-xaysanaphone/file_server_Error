@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Error Details</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="container">
+    <a href='/views' style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;">ກັບ​ຄືນ</a>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Error Message</th>
+          <th>Views</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= data.code %></td>
+          <td><%= data.error_message %></td>
+          <td><%= data.views %></td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- root cause -->
+    <div class="root-cause description-box">
+
+      <h4>ສາ​ເຫດ:</h4>
+      <div id="divScroll">
+        <table>
+          <thead>
+            <tr>
+              <!-- <th>ລຳ​ດັບ</th> -->
+              <th>ສາ​ເຫດ</th>
+              <th>⚙</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.root_cause && data.root_cause.length) { %>
+            <% data.root_cause.forEach((cause,index)=> { %>
+            <tr>
+              <!-- <td><%= // index + 1 %></td> -->
+              <td><%= cause %></td>
+              <td>
+                <button type="button" id="button" style="background-color: #D52941;" onclick="root_cause.pull('<%= cause %>')">ລ​ົບ</button>
+              </td>
+            </tr>
+            <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+
+      </div>
+      <hr>
+      <div class="description-box">
+        <h4>ລາຍ​ລະ​ອຽດ</h4>
+        <hr>
+        <br>
+        <paragraph><%= data.description %></paragraph>
+      </div>
+    </div>
+    <!-- resolutions -->
+    <div class="description-box">
+      <h4>ວິ​ທີ​ແກ້ບັນ​ຫາ​ເບື້ອງ​ຕົ້ນ:</h4>
+      <div class="resolutions" id="divScroll">
+        <table style="background-color: white;">
+          <thead>
+            <tr>
+              <th>ຫົວ​ຂໍ້</th>
+              <th>ລາຍ​ລະ​ອຽດ</th>
+              <th>
+                file
+              </th>
+              <th>
+                ⚙
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.resolutions && data.resolutions.length) { %>
+            <% data.resolutions.map(resolution => { %>
+            <tr>
+              <td><%= resolution.title %></td>
+              <td style="text-align: justify;"><%= resolution.description %></td>
+              <!-- files -->
+              <td style="text-align: center;">
+                <div class="card">
+                  <div class="card-body">
+                    <% if (['jpg', 'jpeg', 'png'].includes(resolution.file_path.split('.').pop()) ){ %>
+                    <img src="/static/<%= resolution.file_path %>" alt="ເກີດ​ຂໍ້​ຜິດ​ພາດ" style="max-width: 400px;">
+                    <%  } else if (resolution.file_path.split('.').pop() === 'mp4') { %>
+                    <video src="/static/<%= resolution.file_path %>" controls> </video>
+                    <%  } else if(['pdf','docx'].includes(resolution.file_path.split('.').pop())) { %>
+                    <p>
+                      <a href=" /download?file=<%= resolution.file_path %>">download ເອ​ກະ​ສານ</a>
+                    </p>
+                    <% } %>
+                  </div>
+
+                  <div class="card-footer">
+                    <a href="/download?file=<%= resolution.file_path %>" id="button">download</a>
+                  </div>
+                </div>
+              </td>
+
+
+            </tr>
+
+            <% }) %>
+            <% } %>
+          </tbody>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

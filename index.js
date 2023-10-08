@@ -8,11 +8,13 @@ const connectDB = require('./utils/connectDB')
 const morgan = require('morgan')
 const cors = require('cors')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors())
+app.use(cookieParser())
 app.set('view engine', 'ejs');
 
 //* to not face error: Schema hasn't been registered for model

@@ -12,15 +12,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+  <style>
+
+  </style>
 
 </head>
 
 <body style="padding:3% 20%;">
-
-  <!-- <button id="button" style="font-size: large;"> -->
-  <a id='button' href="/views/err_definition/create">ເພີ່ມ</a>
-
-  <!-- </button> -->
+  <%- include('./partials/nav') %>
   <!-- search bar -->
   <div class="search-box" style="margin: 2%;">
     <form class="search-form">
@@ -40,7 +39,6 @@
           <th>error_message</th>
           <th>ສາ​ເຫດ</th>
           <th>views</th>
-          <th>⚙</th>
         </tr>
       </thead>
       <tbody>
@@ -67,41 +65,48 @@
           <td>
             <%= data.data[i].views %>
           </td>
-          <td>
-            <button id='button' style="background-color: #D52941;" onclick="err_def.remove('<%= data.data[i]._id %>')">ລົບ</button>
-          </td>
+
         </tr>
         <% } %>
       </tbody>
     </table>
+    <div class="pagination">
+      <% if(data.total_page === 1 || data.previous === 0 || data.total === 0){ %>
+      <!-- <button href="/guest/views/index?page=<%= data.previous - 1 %>" class="prev" disabled>Previous</button> -->
+      <%} else{ %>
+      <a href="/guest/views/index?page=<%= data.previous - 1 %>" class="prev">Previous</a>
+      <% } %>
+
+      <% for(let i =1; i <= data.total_page; i++){ %>
+      <% if(i === data.page){ %>
+      <button class="page selected" id='' disabled><%= data.page %></button>
+      <% }else{ %>
+      <a class="page" href="/guest/views/index?page=<%= i %>"> <%= i %> </a>
+      <% } %>
+      <% } %>
+
+      <% if(data.total_page === 1 || data.next === 0 || data.total === 0){ %>
+      <%} else{ %>
+      <a class="next" href="/guest/views/index?page=<%= data.next %>">Next</a>
+
+      <% } %>
+
+    </div>
+    <!-- <div class="pagination">
+      <a href="/user/views/index?page=<%=// data.previous - 1 %>" class="prev">Previous</a>
+      <% //for(let i =1; i <= data.total_page; i++){ %>
+      <%// if(i === data.page){ %>
+      <button class="page selected" id='button' disabled><%= //data.page %></button>
+      <% // // }else{ %>
+      <a class="page" href="/user/views/index?page=<%=// i %>"> <%=// i %> </a>
+      <%// } %>
+      <%// } %>
+      <a class="next" href="/user/views/index?page=<%=// data.next %>">Next</a>
+    </div> -->
+
 
   </div>
   <script>
-    const err_def = {
-      remove: async (_id) => {
-        try {
-          let text = "ຍືນ​ຍັນ​ການ​ລົບ";
-          if (confirm(text) == true) {
-            const result = await fetch('/api/err_definition/' + _id, {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              method: 'DELETE',
-            })
-            // console.log(result)
-            if (result.status > 400) throw new Error(result.statusText, {
-              cause: result
-            })
-            window.location.href = window.location.href;
-          }
-        } catch (error) {
-          console.log(e)
-          alert(e.message || e.statusText)
-        }
-      }
-    }
-
-
     const searchForm = document.getElementById('search-form');
     const searchInput = searchForm.querySelector('input[name="search"]');
 

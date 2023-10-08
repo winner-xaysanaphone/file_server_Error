@@ -7,6 +7,7 @@ const populate = [{ path: "user_id" }]
 const fs = require('fs')
 const path = require('path')
 const rollback_handler = require('../middlewares/rollback_handler')
+const { log, logLevels } = require('../utils/logger')
 
 module.exports = {
     read: async (req, res, next) => {

@@ -13,7 +13,7 @@ module.exports = {
             const result = await paginate({
                 req,
                 model: Model,
-                sort: { 'created_at': -1 },
+                // sort: { 'created_at': -1 },
                 populate: populate,
                 searchField: ['code', 'error_message']
             })

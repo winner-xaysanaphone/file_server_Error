@@ -9,25 +9,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
 
-  <form id="err_update_form" method="POST">
-    <a href='/views/err_definition/<%= data._id %>'>ກັບ​ຄືນ</a>
-    <h2>ແກ້​ໄຂ Error</h2>
-    <p>code: <%= data.code+data.error_message %> </p>
-    <label for="code">Code</label>
-    <input type="text" id="code" name="code" value="<%= data.code %>" required>
+  <form id="login" method="POST">
+    <a href="/views/admin/register">ລົງ​ຊື່​ເຂົ້າ​ໃຊ້</a>
+    <h2>Login</h2>
+    <p>login as admin</p>
+    <label for="teller_id">Teller Id</label>
+    <input type="text" id="teller_id" name="teller_id" required>
 
-    <label for="error_message">error message</label>
-    <input type="text" id="error_message" name="error_message" value="<%= data.error_message %>" required>
+    <label for="password">password</label>
+    <input type="password" id="password" name="password" required>
 
-    <label for="description">Description</label>
-    <textarea id="description" name="description"><%= data.description %></textarea>
     <center>
-      <button type="submit" id="button">ແກ້​ໄຂ</button>
+      <button type="submit" id="button">Login</button>
     </center>
   </form>
 
@@ -35,15 +32,15 @@
   </div>
 
   <script>
-    const myForm = document.getElementById('err_update_form');
+    const myForm = document.getElementById('login');
     myForm.addEventListener('submit', async (event) => {
       try {
         event.preventDefault(); // prevent form from submitting
         const obj = {}
-        let fields = ['code', 'error_message', 'description']
+        let fields = ['teller_id', 'password']
         fields.map(field => obj[field] = document.getElementById(field).value)
-        let result = await fetch('/api/err_definition/<%= data._id %>?add_views=false', {
-          method: 'PUT',
+        let result = await fetch('/api/login', {
+          method: 'POST',
           body: JSON.stringify(obj),
           headers: {
             'Content-Type': 'application/json'
@@ -54,8 +51,10 @@
         if (result.status >= 400) throw new Error(data.message, {
           cause: data
         })
-        window.location.href = '/views/err_definition/<%= data._id %>'
+
+        window.location.href = '/admin/views'
       } catch (error) {
+        console.log(error)
         console.log(error.cause)
         alert(error.message)
       }

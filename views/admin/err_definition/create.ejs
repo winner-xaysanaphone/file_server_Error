@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://localhost:911/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <form id="err_create_form" method="POST">
+    <a href='/admin/views'>ກັບ​ຄືນ</a>
+    <h2>ເພີ່ມ Error</h2>
+
+    <label for="code">Code</label>
+    <input type="text" id="code" name="code" required>
+
+    <label for="error_message">error message</label>
+    <input type="text" id="error_message" name="error_message" required>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description"></textarea>
+    <center>
+      <button type="submit" id="button">ເພີ່ມ</button>
+    </center>
+  </form>
+
+  <div>
+  </div>
+
+  <script>
+    const myForm = document.getElementById('err_create_form');
+    myForm.addEventListener('submit', async (event) => {
+      try {
+        event.preventDefault(); // prevent form from submitting
+        const obj = {}
+        let fields = ['code', 'error_message', 'description']
+        fields.map(field => obj[field] = document.getElementById(field).value)
+        let result = await fetch('/admin/api/err_definition', {
+          method: 'POST',
+          body: JSON.stringify(obj),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        let data = await result.json()
+
+        if (result.status >= 400) throw new Error(data.message, {
+          cause: data
+        })
+        window.location.href = '/views'
+      } catch (error) {
+        console.log(error.cause)
+        alert(error.message)
+      }
+    });
+  </script>
+</body>
+
+</html>

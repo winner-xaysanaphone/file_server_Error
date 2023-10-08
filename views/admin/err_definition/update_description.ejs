@@ -42,7 +42,7 @@
 
 <body>
   <form id='form-description'>
-    <a href='/views/err_definition/<%= data._id %>' style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;">ກັບ​ຄືນ</a> <br>
+    <a href='/admin/views/err_definition/<%= data._id %>' style="font-size: 1.2em;font-family: 'Noto Serif Lao', serif;">ກັບ​ຄືນ</a> <br>
     <h2>ແກ້​ໄຂລາຍ​ລະ​ອຽດ</h2>
     <label for="err_definition">ລາຍ​ລະ​ອຽດ</label>
     <!-- <input type="text" style="background-color: #bbd0ff;" id="err_definition" name="err_definition" value="<%= data.title %>" disabled> -->
@@ -66,7 +66,7 @@
         let obj = {
           description: description
         }
-        const result = await fetch('/api/err_definition/<%= data._id %>?add_views=false', {
+        const result = await fetch('/admin/api/err_definition/<%= data._id %>?add_views=false', {
           headers: {
             'Content-Type': 'application/json'
           },
